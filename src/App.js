@@ -1,22 +1,21 @@
 import React, { useState } from "react";
-import { getWeatherByCity, getForecastByCity } from "./api";
+import api from "./api"; 
 
 function App() {
   const [city, setCity] = useState(""); 
   const [weather, setWeather] = useState(null); 
   const [forecast, setForecast] = useState(null); 
 
+  
   const handleSearch = async () => {
     if (city) {
-      console.log("Sto cercando:", city);
       try {
-        
-        const data = await getWeatherByCity(city);
-        console.log("Dati meteo ricevuti:", data);
+        console.log("Sto cercando la città:", city);
+        const data = await api.getWeatherByCity(city);
+        console.log("Meteo ricevuto:", data);
         setWeather(data);
-
-        
-        const forecastData = await getForecastByCity(city);
+  
+        const forecastData = await api.getForecastByCity(city);
         console.log("Previsioni ricevute:", forecastData);
         setForecast(forecastData);
       } catch (error) {
@@ -26,7 +25,7 @@ function App() {
       console.error("Inserisci una città!");
     }
   };
-
+  
   
   const needsUmbrella =
     weather &&
@@ -40,8 +39,8 @@ function App() {
     const main = weather.weather[0].main.toLowerCase();
     if (main.includes("rain")) return { backgroundColor: "#708090" }; 
     if (main.includes("snow")) return { backgroundColor: "#ffffff" }; 
-    if (main.includes("cloud")) return { backgroundColor: "#A9A9A9" }; 
-    return { backgroundColor: "#AFEEEE" }; 
+    if (main.includes("cloud")) return { backgroundColor: "#A9A9A9" };
+    return { backgroundColor: "#AFEEEE" };
   };
 
   return (
@@ -95,5 +94,3 @@ function App() {
 }
 
 export default App;
-
-
